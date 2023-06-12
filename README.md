@@ -3,18 +3,18 @@ _A seamless bridge between a build script and the main crate._
 
 # Usage steps
 
-1. (Optional*) Implement the [`ToTokenStream`] trait for each of your build script's 'exported' types.
-* This is predefined for primitive types ([`u8`], [`i32`], [`char`], [`bool`], ...), [`slice`]s,
-[`array`]s, and [`Vec`]s. This step is only necessary if you're exporting your own types.
+1. (Optional*) Implement the `ToTokenStream` trait for each of your build script's 'exported' types.
+* This is predefined for primitive types (`u8`, `i32`, `char`, `bool`, ...), `slice`s,
+`array`s, and `Vec`s. This step is only necessary if you're exporting your own types.
 * These types should be implemented in a separate crate, so they're usable from the build script
 _and_ the main crate.
 
 2. Generate the required data in your build script.
 
-3. Export your data with any combination of [`write_array_fn`], [`write_const_array`],
-[`write_static_array`], and [`write_vector_fn`].
+3. Export your data with any combination of `write_array_fn`, `write_const_array`,
+`write_static_array`, and `write_vector_fn`.
 
-4. In the main part of your crate (within `src/`) import your data with [`use_symbols`].
+4. In the main part of your crate (within `src/`) import your data with `use_symbols`.
 
 (*) We expect to automate this step soon by providing suitable `[#derive(...)]` macros.
 
@@ -36,7 +36,7 @@ compile-time computations in Rust.
 
 # A simple example
 build.rs
-```no_run
+```rust
 use rustifact::ToTokenStream;
 
 fn main() {
@@ -64,7 +64,7 @@ fn main() {
 ```
 
 src/main.rs
-```no_run
+```rust
 rustifact::use_symbols!(CITY_DATA);
 // The above line is equivalent to the declaration:
 // static CITY_DATA: [(&'static str, u32); 1000] = [/*.. data from build.rs */];
