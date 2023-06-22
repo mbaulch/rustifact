@@ -234,6 +234,27 @@ where
     }
 }
 
+impl<T> ToTokenStream for Option<T>
+where
+    T: ToTokenStream,
+{
+    fn to_toks(&self, tokens: &mut TokenStream) {
+        let element;
+        match self {
+            Some(a) => {
+                let a_toks = a.to_tok_stream();
+                element = quote! {
+                    Some(#a_toks)
+                };
+            }
+            None => {
+                element = quote! { None };
+            }
+        }
+        tokens.extend(element);
+    }
+}
+
 macro_rules! build_tuple_trait {
     ($($id:ident),+;$($index:literal),+) => {
         fn to_toks(&self, tokens: &mut TokenStream) {
