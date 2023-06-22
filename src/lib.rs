@@ -265,6 +265,135 @@ where
     build_tuple_trait!(t1, t2, t3; 0, 1, 2);
 }
 
+impl<T1, T2, T3, T4> ToTokenStream for (T1, T2, T3, T4)
+where
+    T1: ToTokenStream,
+    T2: ToTokenStream,
+    T3: ToTokenStream,
+    T4: ToTokenStream,
+{
+    build_tuple_trait!(t1, t2, t3, t4; 0, 1, 2, 3);
+}
+
+impl<T1, T2, T3, T4, T5> ToTokenStream for (T1, T2, T3, T4, T5)
+where
+    T1: ToTokenStream,
+    T2: ToTokenStream,
+    T3: ToTokenStream,
+    T4: ToTokenStream,
+    T5: ToTokenStream,
+{
+    build_tuple_trait!(t1, t2, t3, t4, t5; 0, 1, 2, 3, 4);
+}
+
+impl<T1, T2, T3, T4, T5, T6> ToTokenStream for (T1, T2, T3, T4, T5, T6)
+where
+    T1: ToTokenStream,
+    T2: ToTokenStream,
+    T3: ToTokenStream,
+    T4: ToTokenStream,
+    T5: ToTokenStream,
+    T6: ToTokenStream,
+{
+    build_tuple_trait!(t1, t2, t3, t4, t5, t6; 0, 1, 2, 3, 4, 5);
+}
+
+impl<T1, T2, T3, T4, T5, T6, T7> ToTokenStream for (T1, T2, T3, T4, T5, T6, T7)
+where
+    T1: ToTokenStream,
+    T2: ToTokenStream,
+    T3: ToTokenStream,
+    T4: ToTokenStream,
+    T5: ToTokenStream,
+    T6: ToTokenStream,
+    T7: ToTokenStream,
+{
+    build_tuple_trait!(t1, t2, t3, t4, t5, t6, t7; 0, 1, 2, 3, 4, 5, 6);
+}
+
+impl<T1, T2, T3, T4, T5, T6, T7, T8> ToTokenStream for (T1, T2, T3, T4, T5, T6, T7, T8)
+where
+    T1: ToTokenStream,
+    T2: ToTokenStream,
+    T3: ToTokenStream,
+    T4: ToTokenStream,
+    T5: ToTokenStream,
+    T6: ToTokenStream,
+    T7: ToTokenStream,
+    T8: ToTokenStream,
+{
+    build_tuple_trait!(t1, t2, t3, t4, t5, t6, t7, t8; 0, 1, 2, 3, 4, 5, 6, 7);
+}
+
+impl<T1, T2, T3, T4, T5, T6, T7, T8, T9> ToTokenStream for (T1, T2, T3, T4, T5, T6, T7, T8, T9)
+where
+    T1: ToTokenStream,
+    T2: ToTokenStream,
+    T3: ToTokenStream,
+    T4: ToTokenStream,
+    T5: ToTokenStream,
+    T6: ToTokenStream,
+    T7: ToTokenStream,
+    T8: ToTokenStream,
+    T9: ToTokenStream,
+{
+    build_tuple_trait!(t1, t2, t3, t4, t5, t6, t7, t8, t9; 0, 1, 2, 3, 4, 5, 6, 7, 8);
+}
+
+impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> ToTokenStream
+    for (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)
+where
+    T1: ToTokenStream,
+    T2: ToTokenStream,
+    T3: ToTokenStream,
+    T4: ToTokenStream,
+    T5: ToTokenStream,
+    T6: ToTokenStream,
+    T7: ToTokenStream,
+    T8: ToTokenStream,
+    T9: ToTokenStream,
+    T10: ToTokenStream,
+{
+    build_tuple_trait!(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10; 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+}
+
+impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> ToTokenStream
+    for (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)
+where
+    T1: ToTokenStream,
+    T2: ToTokenStream,
+    T3: ToTokenStream,
+    T4: ToTokenStream,
+    T5: ToTokenStream,
+    T6: ToTokenStream,
+    T7: ToTokenStream,
+    T8: ToTokenStream,
+    T9: ToTokenStream,
+    T10: ToTokenStream,
+    T11: ToTokenStream,
+{
+    build_tuple_trait!(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11; 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+}
+
+impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> ToTokenStream
+    for (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)
+where
+    T1: ToTokenStream,
+    T2: ToTokenStream,
+    T3: ToTokenStream,
+    T4: ToTokenStream,
+    T5: ToTokenStream,
+    T6: ToTokenStream,
+    T7: ToTokenStream,
+    T8: ToTokenStream,
+    T9: ToTokenStream,
+    T10: ToTokenStream,
+    T11: ToTokenStream,
+    T12: ToTokenStream,
+{
+    build_tuple_trait!(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12; 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+}
+
 /// An implementation detail, exposing parts of external crates used by `rustifact`.
 ///
 /// API stability is not guaranteed here.
