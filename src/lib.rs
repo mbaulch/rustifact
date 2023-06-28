@@ -623,3 +623,42 @@ use_symbols!(
     write_static_array,
     write_vector_fn
 );
+
+#[macro_export]
+macro_rules! write_static {
+    ($id:ident, $t:ty, $data:expr) => {
+        let data: $t = $data;
+        rustifact::__write_array_with_internal!(
+            static,
+            $id,
+            rustifact::internal::quote! { $t },
+            data.to_tok_stream()
+        );
+    };
+}
+
+#[macro_export]
+macro_rules! write_const {
+    ($id:ident, $t:ty, $data:expr) => {
+        let data: $t = $data;
+        rustifact::__write_array_with_internal!(
+            const,
+            $id,
+            rustifact::internal::quote! { $t },
+            data.to_tok_stream()
+        );
+    };
+}
+
+#[macro_export]
+macro_rules! write_fn {
+    ($id:ident, $t:ty, $data:expr) => {
+        let data: $t = $data;
+        rustifact::__write_fn_with_internal!(
+            const,
+            $id,
+            rustifact::internal::quote! { $t },
+            data.to_tok_stream()
+        );
+    };
+}
