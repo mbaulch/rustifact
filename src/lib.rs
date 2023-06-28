@@ -655,7 +655,7 @@ macro_rules! write_fn {
     ($id:ident, $t:ty, $data:expr) => {
         let data: $t = $data;
         rustifact::__write_fn_with_internal!(
-            const,
+            dummy,
             $id,
             rustifact::internal::quote! { $t },
             data.to_tok_stream()
