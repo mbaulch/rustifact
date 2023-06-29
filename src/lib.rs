@@ -423,8 +423,8 @@ pub mod internal {
     pub use prettyplease::unparse;
     /// A re-export of the `proc_macro2` crate's `TokenStream` type.
     pub use proc_macro2::TokenStream;
-    /// A re-export of the `quote` crate's `quote!` macro.
-    pub use quote::quote;
+    /// A re-export of the `quote` crate's `quote!` and `format_ident!` macros.
+    pub use quote::{format_ident, quote};
     /// A re-export of the `syn` quote's `parse_file` function.
     pub use syn::parse_file;
 }
@@ -660,5 +660,75 @@ macro_rules! write_fn {
             rustifact::internal::quote! { $t },
             data.to_tok_stream()
         );
+    };
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! __write_internal {
+    ($static_const:ident, $id_group:ident, $t:ty, $public:literal, $ids_data:expr) => {
+        let mut toks = rustifact::internal::TokenStream::new();
+        let ids_data = $ids_data;
+        for (id_str, data) in ids_data.iter() {
+            let data_toks = data.to_tok_stream();
+            let id = rustifact::internal::format_ident!("{}", id_str);
+            let element = if $public {
+                rustifact::internal::quote! { pub $static_const #id: $t = #data_toks; }
+            } else {
+                rustifact::internal::quote! { $static_const #id: $t = #data_toks; }
+            };
+            toks.extend(element);
+        }
+        rustifact::__write_tokens_with_internal!($id_group, toks);
+    };
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! __write_internal_fns {
+    ($id_group:ident, $t:ty, $public:literal, $ids_data:expr) => {
+        let mut toks = rustifact::internal::TokenStream::new();
+        let ids_data = $ids_data;
+        for (id_str, data) in ids_data.iter() {
+            let data_toks = data.to_tok_stream();
+            let id = rustifact::internal::format_ident!("{}", id_str);
+            let element = if $public {
+                rustifact::internal::quote! { pub fn #id() -> $t {#data_toks} }
+            } else {
+                rustifact::internal::quote! { fn #id() -> $t {#data_toks} }
+            };
+            toks.extend(element);
+        }
+        rustifact::__write_tokens_with_internal!($id_group, toks);
+    };
+}
+
+#[macro_export]
+macro_rules! write_statics {
+    (public, $id_group:ident, $t:ty, $ids_data:expr) => {
+        rustifact::__write_internal!(static, $id_group, $t, true, $ids_data);
+    };
+    ($id_group:ident, $t:ty, $ids_data:expr) => {
+        rustifact::__write_internal!(static, $id_group, $t, false, $ids_data);
+    };
+}
+
+#[macro_export]
+macro_rules! write_consts {
+    (public, $id_group:ident, $t:ty, $ids_data:expr) => {
+        rustifact::__write_internal!(const, $id_group, $t, true, $ids_data);
+    };
+    ($id_group:ident, $t:ty, $ids_data:expr) => {
+        rustifact::__write_internal!(const, $id_group, $t, false, $ids_data);
+    };
+}
+
+#[macro_export]
+macro_rules! write_fns {
+    (public, $id_group:ident, $t:ty, $ids_data:expr) => {
+        rustifact::__write_internal_fns!($id_group, $t, true, $ids_data);
+    };
+    ($id_group:ident, $t:ty, $ids_data:expr) => {
+        rustifact::__write_internal_fns!($id_group, $t, false, $ids_data);
     };
 }
