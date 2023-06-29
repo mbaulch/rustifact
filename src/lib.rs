@@ -708,7 +708,7 @@ macro_rules! write_statics {
     (public, $id_group:ident, $t:ty, $ids_data:expr) => {
         rustifact::__write_internal!(static, $id_group, $t, true, $ids_data);
     };
-    ($id_group:ident, $t:ty, $ids_data:expr) => {
+    (private, $id_group:ident, $t:ty, $ids_data:expr) => {
         rustifact::__write_internal!(static, $id_group, $t, false, $ids_data);
     };
 }
@@ -718,7 +718,7 @@ macro_rules! write_consts {
     (public, $id_group:ident, $t:ty, $ids_data:expr) => {
         rustifact::__write_internal!(const, $id_group, $t, true, $ids_data);
     };
-    ($id_group:ident, $t:ty, $ids_data:expr) => {
+    (private, $id_group:ident, $t:ty, $ids_data:expr) => {
         rustifact::__write_internal!(const, $id_group, $t, false, $ids_data);
     };
 }
@@ -728,7 +728,7 @@ macro_rules! write_fns {
     (public, $id_group:ident, $t:ty, $ids_data:expr) => {
         rustifact::__write_internal_fns!($id_group, $t, true, $ids_data);
     };
-    ($id_group:ident, $t:ty, $ids_data:expr) => {
+    (private, $id_group:ident, $t:ty, $ids_data:expr) => {
         rustifact::__write_internal_fns!($id_group, $t, false, $ids_data);
     };
 }
