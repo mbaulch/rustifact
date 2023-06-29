@@ -2,7 +2,7 @@ use rustifact::ToTokenStream;
 
 fn generate_city_data() -> Vec<(String, u32)> {
     let mut city_data: Vec<(String, u32)> = Vec::new();
-    for i in 1..=1000 {
+    for i in 1..=100 {
         let city_name = format!("City{}", i);
         let population = i * 1000; // Dummy population data
         city_data.push((city_name, population));
@@ -22,8 +22,5 @@ fn main() {
     // We could have specified the dimension like so:
     //rustifact::write_static_array!(CITY_DATA, (&'static str, u32) : 1, &city_data);
     //
-    // When the dimension is unspecified, the default is dimension 1.
-    //
-    // Passing city_data as a slice allows it to be treated as an
-    // array. Note that this would not have been possible if its elements were heap allocated.
+    // When the dimension is unspecified (as above) the default is dimension 1.
 }
