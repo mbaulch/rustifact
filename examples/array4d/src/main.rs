@@ -5,10 +5,18 @@ fn main() {
     for i in 0..5 {
         for j in 0..5 {
             for k in 0..5 {
+                if k != 0 {
+                    print!(" ");
+                }
                 for l in 0..5 {
-                    println!("{}", ARRAY_4D[i][j][k][l]);
+                    if l != 0 {
+                        print!(",");
+                    }
+                    print!("{}", ARRAY_4D[i][j][k][l]);
                 }
             }
+            println!("");
         }
+        println!("\n");
     }
 }
