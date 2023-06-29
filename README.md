@@ -13,14 +13,14 @@ that produce data for inclusion into the final binary.
 # Usage steps
 1. Generate the required data in your build script.
 
-2. (Optional*#) Implement the [`ToTokenStream`] trait for each of your build script's 'exported' types.
+2. (Optional*#) Implement the `ToTokenStream` trait for each of your build script's 'exported' types.
 
 3. Export your data with any combination of the `write_X` macros.
 
-4. In the main part of your crate (within `src/`) import your data with [`use_symbols`].
+4. In the main part of your crate (within `src/`) import your data with `use_symbols`.
 
-(*) [`ToTokenStream`] is implemented for primitive types ([`u8`], [`i32`], [`char`], [`bool`], ...),
-[`slice`]s, [`array`], [`Vec`], and [`Option`]. This step is only necessary if you're exporting your
+(*) `ToTokenStream` is implemented for primitive types (`u8`, `i32`, `char`, `bool`, ...),
+`slice`s, `array`, `Vec`, and `Option`. This step is only necessary if you're exporting your
 own types. We expect to automate this step soon by providing suitable `[#derive(...)]` macros.
 
 (#) These types should be implemented in a separate crate, so they're usable from the build script
@@ -77,4 +77,4 @@ Some breaking changes may occur in the future, though we aim to preserve backwar
 where possible.
 
 # License
-Rustifact is free software, and is released under the terms of the [Mozilla Public License](https://www.mozilla.org/en-US/MPL/) version 2.0. See [LICENSE](LICENSE).//! # Rustifact
+Rustifact is free software, and is released under the terms of the [Mozilla Public License](https://www.mozilla.org/en-US/MPL/) version 2.0. See [LICENSE](LICENSE).
