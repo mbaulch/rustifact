@@ -23,14 +23,16 @@ fn get_closable_tags() -> Vec<String> {
 
 fn main() {
     let mut tags = Vec::new();
-    for tag_id in get_non_closable_tags()
+    for tag_id in get_closable_tags()
         .iter()
-        .chain(get_closable_tags().iter())
+        .chain(get_non_closable_tags().iter())
     {
         tags.push((
             format!("OPEN_{}", tag_id.to_ascii_uppercase()),
             format!("<{}>", tag_id),
         ));
+    }
+    for tag_id in get_closable_tags().iter() {
         tags.push((
             format!("CLOSE_{}", tag_id.to_ascii_uppercase()),
             format!("</{}>", tag_id),
