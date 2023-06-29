@@ -6,38 +6,31 @@
 //!
 //! _A seamless bridge between a build script and the main crate._
 //!
-//! # Usage steps
-//!
-//! 1. (Optional*) Implement the [`ToTokenStream`] trait for each of your build script's 'exported' types.
-//! * This is predefined for primitive types ([`u8`], [`i32`], [`char`], [`bool`], ...), [`slice`]s,
-//! [`array`]s, and [`Vec`]s. This step is only necessary if you're exporting your own types.
-//! * These types should be implemented in a separate crate, so they're usable from the build script
-//! _and_ the main crate.
-//!
-//! 2. Generate the required data in your build script.
-//!
-//! 3. Export your data with any combination of [`write_array_fn`], [`write_const_array`],
-//! [`write_static_array`], and [`write_vector_fn`].
-//!
-//! 4. In the main part of your crate (within `src/`) import your data with [`use_symbols`].
-//!
-//! (*) We expect to automate this step soon by providing suitable `[#derive(...)]` macros.
-//!
 //! # Motivation
 //! When it comes to generating computationally intensive artifacts at compile time, we have
 //! many tools at our disposal: build scripts (build.rs), declarative macros (macro_rules!),
 //! procedural macros, and increasingly, const functions. Each of these methods, however,
 //! brings its own set of challenges.
 //!
-//! Issues with namespaces and types can arise from using build scripts and macros. Const functions,
-//! while useful, may cause performance issues during compilation. Build scripts can make file management
-//! complex. The number of library functions available to macros and const functions is limited.
-//! Declarative macros suffer from a lack of expressiveness, and both macros and const functions can
-//! encounter problems with environmental isolation.
+//! *Rustifact* has been designed as a streamlined abstraction layer that simplifies the creation of build scripts
+//! that produce data for inclusion into the final binary.
 //!
-//! Rustifact has been designed as a streamlined abstraction layer that simplifies the use of build scripts.
-//! By mitigating these complexities, Rustifact offers a more efficient approach for handling
-//! compile-time computations in Rust.
+//! # Usage steps
+//!
+//! 1. Generate the required data in your build script.
+//!
+//! 2. (Optional*#) Implement the [`ToTokenStream`] trait for each of your build script's 'exported' types.
+//!
+//! 3. Export your data with any combination of the `write_X` macros.
+//!
+//! 4. In the main part of your crate (within `src/`) import your data with [`use_symbols`].
+//!
+//! (*) [`ToTokenStream`] is implemented for primitive types ([`u8`], [`i32`], [`char`], [`bool`], ...),
+//! [`slice`]s, [`array`], [`Vec`], and [`Option`]. This step is only necessary if you're exporting your
+//! own types. We expect to automate this step soon by providing suitable `[#derive(...)]` macros.
+//!
+//! (#) These types should be implemented in a separate crate, so they're usable from the build script
+//! _and_ the main crate.
 //!
 //! # A simple example
 //! build.rs
@@ -84,12 +77,10 @@
 //! ```
 //!
 //! # Development status
-//! Please note that _Rustifact_ is in an early development stage. While it is utilised in at least one
-//! commercial project, it lacks extensive testing and polishing. Overall, it is unlikely to cause unpleasant
-//! surprises, though there may be edge cases that haven't yet been discovered.
-//! As the API surface is minimal, it's unlikely that API changes would cause major headaches,
-//! though be warned that some breaking changes may occur in the future.
-//!
+//! Please note that _Rustifact_ is in an early development stage.  Overall, it is unlikely to
+//! cause unpleasant surprises, though there may be edge cases that haven't yet been discovered.
+//! Some breaking changes may occur in the future, though we aim to preserve backward compatibility
+//! where possible.
 
 use proc_macro2::{Ident, Literal, Span, TokenStream};
 use quote::{quote, TokenStreamExt};
