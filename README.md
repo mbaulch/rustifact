@@ -70,6 +70,13 @@ fn main() {
 }
 ```
 
+# More examples
+
+* [array4d](examples/array4d) Generates and exports a 4 dimensional array using `write_static_array!`
+
+* [html_tags](examples/html_tags) Exports a large collection of individual constants using `write_statics!`.
+
+
 # Development status
 Please note that _Rustifact_ is in an early development stage.  Overall, it is unlikely to
 cause unpleasant surprises, though there may be edge cases that haven't yet been discovered.
