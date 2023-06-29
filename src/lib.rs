@@ -624,6 +624,14 @@ use_symbols!(
     write_vector_fn
 );
 
+#[doc = "Write a static variable.
+
+Makes the variable available for import into the main crate via `use_symbols`.
+
+## Parameters
+* `$id`: the name of the static variable. This must be used when importing with `use_symbols`.
+* `$t`: the type of the static variable.
+* `$data`: the data to assign to the static variable. Must be representable on the stack."]
 #[macro_export]
 macro_rules! write_static {
     ($id:ident, $t:ty, $data:expr) => {
@@ -637,6 +645,14 @@ macro_rules! write_static {
     };
 }
 
+#[doc = "Write a constant variable.
+
+Makes the constant available for import into the main crate via `use_symbols`.
+
+## Parameters
+* `$id`: the name of the constant. This must be used when importing with `use_symbols`.
+* `$t`: the type of the constant.
+* `$data`: the data to assign to the constant. Must be representable on the stack."]
 #[macro_export]
 macro_rules! write_const {
     ($id:ident, $t:ty, $data:expr) => {
@@ -650,6 +666,14 @@ macro_rules! write_const {
     };
 }
 
+#[doc = "Write a getter function for a heap-allocated variable.
+
+Makes the getter function available for import into the main crate via `use_symbols`.
+
+## Parameters
+* `$id`: the name of the getter function. This must be used when importing with `use_symbols`.
+* `$t`: the return type of the getter function.
+* `$data`: the data to return from the geter function."]
 #[macro_export]
 macro_rules! write_fn {
     ($id:ident, $t:ty, $data:expr) => {
@@ -703,6 +727,22 @@ macro_rules! __write_internal_fns {
     };
 }
 
+#[doc = "Write a collection of static variables with a common type.
+
+Makes the static variables available for import into the main crate via `use_symbols`.
+
+## Parameters
+* `public` or `private`: whether to make the variables publicly visible after import with `use_symbols`.
+* `$id_group`: the group alias by which these variables are referred when importing with `use_symbols`.
+* `$t`: the (common) type of the static variables.
+* `$ids_data`: The list of type `&[(I, $t)]` where $t is as above, and I is a type implementing Display,
+though most commonly String or &'static str. This is a list of identifiers for the variables paired with
+their values.
+
+## Notes
+* Intended for stack-allocated data. For heap-allocated data, use `write_fns` instead.
+* Rather than passing identifiers directly, they are passed as string (in fact Display-implementing) types.
+It is anticipated that this will be more convenient in the typical use cases of the write_Xs family of macros."]
 #[macro_export]
 macro_rules! write_statics {
     (public, $id_group:ident, $t:ty, $ids_data:expr) => {
@@ -713,6 +753,22 @@ macro_rules! write_statics {
     };
 }
 
+#[doc = "Write a collection of constants with a common type.
+
+Makes the constants available for import into the main crate via `use_symbols`.
+
+## Parameters
+* `public` or `private`: whether to make the constants publicly visible after import with `use_symbols`.
+* `$id_group`: the group alias by which these variables are referred when importing with `use_symbols`.
+* `$t`: the (common) type of the static variables.
+* `$ids_data`: The list of type `&[(I, $t)]` where $t is as above, and I is a type implementing Display,
+though most commonly String or &'static str. This is a list of identifiers for the constants paired with
+their values.
+
+## Notes
+* Intended for stack-allocated data. For heap-allocated data, use `write_fns` instead.
+* Rather than passing identifiers directly, they are passed as string (in fact Display-implementing) types.
+It is anticipated that this will be more convenient in the typical use cases of the write_Xs family of macros."]
 #[macro_export]
 macro_rules! write_consts {
     (public, $id_group:ident, $t:ty, $ids_data:expr) => {
@@ -723,6 +779,22 @@ macro_rules! write_consts {
     };
 }
 
+#[doc = "Write a collection of getter functions returning a common type.
+
+Makes the getter functions available for import into the main crate via `use_symbols`.
+
+## Parameters
+* `public` or `private`: whether to make the functions publicly visible after import with `use_symbols`.
+* `$id_group`: the group alias by which these functions are referred when importing with `use_symbols`.
+* `$t`: the (common) return type of the getter functions.
+* `$ids_data`: The list of type `&[(I, $t)]` where $t is as above, and I is a type implementing Display,
+though most commonly String or &'static str. This is a list of identifiers for the functions paired with
+their values.
+
+## Notes
+* Intended for heap-allocated data. For stack-allocated data, consider `write_consts` or `write_static` instead.
+* Rather than passing identifiers directly, they are passed as string (in fact Display-implementing) types.
+It is anticipated that this will be more convenient in the typical use cases of the write_Xs family of macros."]
 #[macro_export]
 macro_rules! write_fns {
     (public, $id_group:ident, $t:ty, $ids_data:expr) => {
