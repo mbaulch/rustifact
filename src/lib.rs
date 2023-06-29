@@ -412,13 +412,15 @@ where
 ///
 /// API stability is not guaranteed here.
 pub mod internal {
-    /// A re-export of the `prettyplease` crate's `unparse` function.
+    /// A re-export of `unparse` from the `prettyplease` crate.
     pub use prettyplease::unparse;
-    /// A re-export of the `proc_macro2` crate's `TokenStream` type.
+    /// A re-export of `TokenStream` from the `proc_macro2` crate.
     pub use proc_macro2::TokenStream;
-    /// A re-export of the `quote` crate's `quote!` and `format_ident!` macros.
-    pub use quote::{format_ident, quote};
-    /// A re-export of the `syn` quote's `parse_file` function.
+    /// A re-export of `format_ident!` from the `quote` crate.
+    pub use quote::format_ident;
+    /// A re-export of `quote!` from the `quote` crate.
+    pub use quote::quote;
+    /// A re-export of `parse_file` from the `syn` crate.
     pub use syn::parse_file;
 }
 
