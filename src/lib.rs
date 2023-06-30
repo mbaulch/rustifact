@@ -670,7 +670,7 @@ fn main() {
 #[macro_export]
 macro_rules! write_static {
     ($id:ident, $t:ty, $data:expr) => {
-        let data: $t = $data;
+        let data = $data;
         rustifact::__write_array_with_internal!(
             static,
             $id,
@@ -717,7 +717,7 @@ fn main() {
 #[macro_export]
 macro_rules! write_const {
     ($id:ident, $t:ty, $data:expr) => {
-        let data: $t = $data;
+        let data = $data;
         rustifact::__write_array_with_internal!(
             const,
             $id,
@@ -762,7 +762,7 @@ fn main() {
 #[macro_export]
 macro_rules! write_fn {
     ($id:ident, $t:ty, $data:expr) => {
-        let data: $t = $data;
+        let data = $data;
         rustifact::__write_fn_with_internal!(
             dummy,
             $id,
