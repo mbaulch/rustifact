@@ -626,7 +626,47 @@ Makes the variable available for import into the main crate via `use_symbols`.
 ## Parameters
 * `$id`: the name of the static variable. This must be used when importing with `use_symbols`.
 * `$t`: the type of the static variable.
-* `$data`: the data to assign to the static variable. Must be representable on the stack."]
+* `$data`: the data to assign to the static variable. Must be representable on the stack.
+
+## Example
+build.rs
+ ```no_run
+use rustifact::ToTokenStream;
+use std::process::Command;
+use std::str;
+
+fn get_cmd_output(cmd: &mut Command) -> Option<String> {
+    cmd.output()
+        .ok()
+        .map(|out| str::from_utf8(&out.stdout).unwrap().trim().to_string())
+}
+
+fn main() {
+    let uname_output: Option<String> = get_cmd_output(Command::new(\"uname\").arg(\"-a\"));
+    let dmesg_output: Option<String> = get_cmd_output(&mut Command::new(\"dmesg\"));
+    rustifact::write_static!(UNAME_OUTPUT, Option<&'static str>, uname_output);
+    rustifact::write_static!(DMESG_OUTPUT, Option<&'static str>, dmesg_output);
+}
+```
+
+src/main.rs
+```no_run
+rustifact::use_symbols!(UNAME_OUTPUT, DMESG_OUTPUT);
+// The above line is equivalent to the declarations:
+// static UNAME_OUTPUT: Option<&'static str> = Some(/* output of 'uname -a' at build time, if it succeeded */);
+// static DMESG_OUTPUT: Option<&'static str> = Some(/* output of 'dmesg' at build time, if it succeeded */);
+
+fn main() {
+    for (cmd, cmd_output) in &[(\"uname -a\", UNAME_OUTPUT), (\"dmesg\", DMESG_OUTPUT)] {
+        print!(\"At build time, the command '{}' \", cmd);
+        if let Some(out) = cmd_output {
+            println!(\"produced output: '{}'\", out);
+        } else {
+            println!(\"failed.\");
+        }
+    }
+}
+```"]
 #[macro_export]
 macro_rules! write_static {
     ($id:ident, $t:ty, $data:expr) => {
@@ -647,7 +687,33 @@ Makes the constant available for import into the main crate via `use_symbols`.
 ## Parameters
 * `$id`: the name of the constant. This must be used when importing with `use_symbols`.
 * `$t`: the type of the constant.
-* `$data`: the data to assign to the constant. Must be representable on the stack."]
+* `$data`: the data to assign to the constant. Must be representable on the stack.
+
+## Example
+build.rs
+ ```no_run
+use rustifact::ToTokenStream;
+
+fn main() {
+    let meaning_of_life = Some(42);
+    rustifact::write_const!(MEANING_OF_LIFE, Option<i32>, meaning_of_life);
+}
+```
+
+src/main.rs
+```no_run
+rustifact::use_symbols!(MEANING_OF_LIFE);
+// The above line is equivalent to the declaration:
+// const MEANING_OF_LIFE: Option<i32> = Some(42);
+
+fn main() {
+    if let Some(mean) = MEANING_OF_LIFE {
+        println!(\"The meaning of life is {}\", mean);
+    } else {
+        println!(\"Life has no meaning.\");
+    }
+}
+```"]
 #[macro_export]
 macro_rules! write_const {
     ($id:ident, $t:ty, $data:expr) => {
@@ -668,7 +734,31 @@ Makes the getter function available for import into the main crate via `use_symb
 ## Parameters
 * `$id`: the name of the getter function. This must be used when importing with `use_symbols`.
 * `$t`: the return type of the getter function.
-* `$data`: the data to return from the geter function."]
+* `$data`: the data to return from the geter function.
+
+## Example
+build.rs
+ ```no_run
+use rustifact::ToTokenStream;
+
+fn main() {
+    let vecs = vec![vec![1, 2], vec![1, 2, 3], vec![1, 2, 3, 4]];
+    rustifact::write_fn!(get_vecs, Vec<Vec<u32>>, vecs);
+}
+```
+
+src/main.rs
+```no_run
+rustifact::use_symbols!(get_vecs);
+// The above line is equivalent to the declaration:
+// fn get_vecs() -> Vec<Vec<u32>> {
+//     vec![vec![1, 2], vec![1, 2, 3], vec![1, 2, 3, 4]]
+// }
+
+fn main() {
+    println!(\"{:?}\", get_vecs());
+}
+```"]
 #[macro_export]
 macro_rules! write_fn {
     ($id:ident, $t:ty, $data:expr) => {
