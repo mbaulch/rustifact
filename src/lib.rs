@@ -422,6 +422,10 @@ pub mod internal {
     pub use quote::quote;
     /// A re-export of `parse_file` from the `syn` crate.
     pub use syn::parse_file;
+    /// A re-export of `parse_str` from the `syn` crate.
+    pub use syn::parse_str;
+    /// A re-export of `Type` from the `syn` crate.
+    pub use syn::Type;
 }
 
 #[doc(hidden)]
@@ -799,6 +803,38 @@ macro_rules! __write_internal {
 
 #[doc(hidden)]
 #[macro_export]
+macro_rules! __write_internal_struct {
+    ($id_struct:ident, $public:literal, $vis_ids_types:expr) => {
+        let mut toks = rustifact::internal::TokenStream::new();
+        let vis_ids_types = $vis_ids_types;
+        for (public, id_str, type_str) in vis_ids_types.iter() {
+            if let Ok(t) = rustifact::internal::parse_str::<rustifact::internal::Type>(type_str) {
+                let id = rustifact::internal::format_ident!("{}", id_str);
+                let element = if *public {
+                    rustifact::internal::quote! { pub #id: #t, }
+                } else {
+                    rustifact::internal::quote! { #id: #t, }
+                };
+                toks.extend(element);
+            } else {
+                panic!("Couldn't parse the type '{}'", type_str);
+            }
+        }
+        let toks_struct = if $public {
+            rustifact::internal::quote! {
+                pub struct $id_struct { #toks }
+            }
+        } else {
+            rustifact::internal::quote! {
+               struct $id_struct { #toks }
+            }
+        };
+        rustifact::__write_tokens_with_internal!($id_struct, toks_struct);
+    };
+}
+
+#[doc(hidden)]
+#[macro_export]
 macro_rules! __write_internal_fns {
     ($id_group:ident, $t:ty, $public:literal, $ids_data:expr) => {
         let mut toks = rustifact::internal::TokenStream::new();
@@ -892,5 +928,40 @@ macro_rules! write_fns {
     };
     (private, $id_group:ident, $t:ty, $ids_data:expr) => {
         rustifact::__write_internal_fns!($id_group, $t, false, $ids_data);
+    };
+}
+
+#[doc = "Write a `struct` type definition.
+
+Makes the `struct` type available for import into the main crate via `use_symbols`.
+
+## Parameters
+* `public` or `private`: whether to make the struct publicly visible after import with `use_symbols`.
+* `$id`: the name of the struct type, and the identifier by which it is referred when importing with
+`use_symbols`.
+* `$vis_ids_types`: The list of type `&[(bool, I, T)]` where the first component indicates visibility
+(true = public, false = private) of a field, I is the field's identifier having type String or &str, and T
+is the field's type: also having type String or &str.
+
+## Notes
+Before using `write_struct!` carefully consider all other approaches. Defining a struct in the usual way
+should be preferred when this is possible.
+
+## Some use cases
+* Generation of wrapper APIs
+* Dependency injection, possibly in combination with `write_statics!`. Suppose that crate A depends on crate B.
+The build script of crate A generates certain constants C1, ..., Cn. `write_struct!` is used to create a
+type T with fields that can be instantiated with the constants C1, ..., Cn.
+Functions (say) in crate B can be called with a parameter of type T, allowing crate B access to the constants
+C1, ..., Cn even though crate B is a dependency of crate A. If access to C1, ..., Cn is desired in crate A or
+other crates depending on crate A, make a suitable call to `write_statics!` (or `write_consts!`) in crate A's
+build script, followed by `use_symbols!`."]
+#[macro_export]
+macro_rules! write_struct {
+    (public, $id_struct:ident, $vis_ids_types:expr) => {
+        rustifact::__write_internal_struct!($id_struct, true, $vis_ids_types);
+    };
+    (private, $id_struct:ident, $vis_ids_types:expr) => {
+        rustifact::__write_internal_struct!($id_struct, false, $vis_ids_types);
     };
 }
