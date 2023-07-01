@@ -565,27 +565,27 @@ macro_rules! __write_tokens_with_internal {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __write_with_internal {
-    ($const_static:ident, $id_name:ident, $arr_type:expr, $tokens_data:expr) => {
+    ($const_static:ident, $id_name:ident, $arr_type:expr, $tokens_data:expr) => {{
         let arr_type = $arr_type;
         let tokens_data = $tokens_data;
         let tokens = rustifact::internal::quote! {
             $const_static $id_name: #arr_type = #tokens_data;
         };
         rustifact::__write_tokens_with_internal!($id_name, tokens);
-    };
+    }};
 }
 
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __write_fn_with_internal {
-    ($_:ident, $id_name:ident, $vec_type:expr, $tokens_data:expr) => {
+    ($_:ident, $id_name:ident, $vec_type:expr, $tokens_data:expr) => {{
         let vec_type = $vec_type;
         let tokens_data = $tokens_data;
         let tokens = rustifact::internal::quote! {
             fn $id_name() -> #vec_type { #tokens_data }
         };
         rustifact::__write_tokens_with_internal!($id_name, tokens);
-    };
+    }};
 }
 
 #[doc(hidden)]
@@ -607,12 +607,12 @@ macro_rules! __write_with_impl {
     (
         $dim:tt, $const_static:ident, $id_name:ident, $t:ty, $data:expr,
         $get_tokens:ident, $get_type:ident, $write_internal:ident
-    ) => {
+    ) => {{
         rustifact::__assert_dim!($dim, $data);
         let tokens_data = rustifact::$get_tokens!($dim, $data);
         let arr_type = rustifact::$get_type!($dim, $t, $data);
         rustifact::$write_internal!($const_static, $id_name, arr_type, tokens_data);
-    };
+    }};
 }
 
 use_symbols!(
@@ -784,7 +784,7 @@ macro_rules! write_fn {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __write_internal {
-    ($static_const:ident, $id_group:ident, $t:ty, $public:literal, $ids_data:expr) => {
+    ($static_const:ident, $id_group:ident, $t:ty, $public:literal, $ids_data:expr) => {{
         let mut toks = rustifact::internal::TokenStream::new();
         let ids_data = $ids_data;
         for (id_str, data) in ids_data.iter() {
@@ -798,13 +798,13 @@ macro_rules! __write_internal {
             toks.extend(element);
         }
         rustifact::__write_tokens_with_internal!($id_group, toks);
-    };
+    }};
 }
 
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __write_internal_struct {
-    ($id_struct:ident, $public:literal, $vis_ids_types:expr) => {
+    ($id_struct:ident, $public:literal, $vis_ids_types:expr) => {{
         let mut toks = rustifact::internal::TokenStream::new();
         let vis_ids_types = $vis_ids_types;
         for (public, id_str, type_str) in vis_ids_types.iter() {
@@ -830,13 +830,13 @@ macro_rules! __write_internal_struct {
             }
         };
         rustifact::__write_tokens_with_internal!($id_struct, toks_struct);
-    };
+    }};
 }
 
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __write_internal_fns {
-    ($id_group:ident, $t:ty, $public:literal, $ids_data:expr) => {
+    ($id_group:ident, $t:ty, $public:literal, $ids_data:expr) => {{
         let mut toks = rustifact::internal::TokenStream::new();
         let ids_data = $ids_data;
         for (id_str, data) in ids_data.iter() {
@@ -850,7 +850,7 @@ macro_rules! __write_internal_fns {
             toks.extend(element);
         }
         rustifact::__write_tokens_with_internal!($id_group, toks);
-    };
+    }};
 }
 
 #[doc = "Write a collection of static variables with a common type.
