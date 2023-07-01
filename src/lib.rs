@@ -931,7 +931,7 @@ macro_rules! write_fns {
     };
 }
 
-#[doc = "Write a `struct` type definition.
+#[doc = "Write a struct type definition.
 
 Makes the `struct` type available for import into the main crate via `use_symbols`.
 
