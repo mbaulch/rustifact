@@ -7,7 +7,7 @@ license = "MPL-2.0"
 repository = "https://github.com/mbaulch/rustifact"
 
 [dependencies]
-quote = "1.0.28"
-prettyplease = "0.2.6"
-syn = "2.0.18"
-proc-macro2 = "1.0.59"
+quote = "1.0.29"
+prettyplease = "0.2.9"
+syn = "2.0.22"
+proc-macro2 = "1.0.63"
