@@ -104,7 +104,7 @@ fn main() {
     write_public!(
         write_static_array,
         static,
-        "__get_tokens_array, __array_type, __write_array_with_internal",
+        "__get_tokens_array, __array_type, __write_with_internal",
         r#"Write an array to a static context.
 
 Makes the array, array reference, or array slice available for import into the main crate via [`use_symbols`].
@@ -122,7 +122,7 @@ where `DIM` is the dimension (1, 2, 3, ...) of the array. The dimension defaults
     write_public!(
         write_const_array,
         const,
-        "__get_tokens_array, __array_type, __write_array_with_internal",
+        "__get_tokens_array, __array_type, __write_with_internal",
         r#"Write an array to a const context.
 
 Makes the array, array reference, or array slice available for import into the main crate via [`use_symbols`].

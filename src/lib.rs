@@ -560,7 +560,7 @@ macro_rules! __write_tokens_with_internal {
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! __write_array_with_internal {
+macro_rules! __write_with_internal {
     ($const_static:ident, $id_name:ident, $arr_type:expr, $tokens_data:expr) => {
         let arr_type = $arr_type;
         let tokens_data = $tokens_data;
@@ -676,7 +676,7 @@ fn main() {
 macro_rules! write_static {
     ($id:ident, $t:ty, $data:expr) => {
         let data = $data;
-        rustifact::__write_array_with_internal!(
+        rustifact::__write_with_internal!(
             static,
             $id,
             rustifact::internal::quote! { $t },
@@ -723,7 +723,7 @@ fn main() {
 macro_rules! write_const {
     ($id:ident, $t:ty, $data:expr) => {
         let data = $data;
-        rustifact::__write_array_with_internal!(
+        rustifact::__write_with_internal!(
             const,
             $id,
             rustifact::internal::quote! { $t },
