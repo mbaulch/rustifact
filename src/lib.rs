@@ -955,7 +955,33 @@ type T with fields that can be instantiated with the constants C1, ..., Cn.
 Functions (say) in crate B can be called with a parameter of type T, allowing crate B access to the constants
 C1, ..., Cn even though crate B is a dependency of crate A. If access to C1, ..., Cn is desired in crate A or
 other crates depending on crate A, make a suitable call to `write_statics!` (or `write_consts!`) in crate A's
-build script, followed by `use_symbols!`."]
+build script, followed by `use_symbols!`.
+
+## Example
+build.rs
+ ```no_run
+fn main() {
+    let foo_fields = vec![
+        (true, \"field_a\", \"Vec<u32>\"),
+        (true, \"field_b\", \"String\"),
+        (false, \"field_c\", \"(bool, Option<f32>)\"),
+        (false, \"field_d\", \"i64\"),
+    ];
+    rustifact::write_struct!(private, Foo, &foo_fields);
+}
+```
+
+src/main.rs
+```no_run
+rustifact::use_symbols!(Foo);
+// The above line is equivalent to the declaration:
+// struct Foo {
+//     pub field_a: Vec<u32>,
+//     pub field_b: String,
+//     field_c: (bool, Option<f32>),
+//     field_d: i64,
+// }
+```"]
 #[macro_export]
 macro_rules! write_struct {
     (public, $id_struct:ident, $vis_ids_types:expr) => {
