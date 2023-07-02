@@ -48,7 +48,8 @@ fn main() {
     let arr2: [f32; 3] = [1.1, 1.2, 1.3];
     rustifact::write_const_array!(ARRAY_2, f32 : 1, &arr2);
     // or equivalently: rustifact::write_const_array!(ARRAY_2, f32, &arr2);
-}```
+}
+```
 
 src/main.rs
 ```rust
