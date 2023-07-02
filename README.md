@@ -84,6 +84,8 @@ rustifact = "0.5"
 
 * [html_tags](examples/html_tags) Exports a large collection of individual constants using `write_statics!`.
 
+For more examples, inspect the `write_X` macros in the [crate documentation](https://docs.rs/rustifact).
+
 # Development status
 Please note that _Rustifact_ is in an early development stage.  Overall, it is unlikely to
 cause unpleasant surprises, though there may be edge cases that haven't yet been discovered.
