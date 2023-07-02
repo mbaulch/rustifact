@@ -35,45 +35,51 @@
 //! # A simple example
 //! build.rs
 //! ```no_run
-//!use rustifact::ToTokenStream;
+//! use rustifact::ToTokenStream;
 //!
-//!fn generate_city_data() -> Vec<(String, u32)> {
-//!    let mut city_data: Vec<(String, u32)> = Vec::new();
-//!    for i in 1..=100 {
-//!        let city_name = format!("City{}", i);
-//!        let population = i * 1000; // Dummy population data
-//!        city_data.push((city_name, population));
-//!    }
-//!    city_data
-//!}
-//!
-//!fn main() {
-//!    let city_data = generate_city_data();
-//!    //
-//!    // Let's make city_data accessible from the main crate. We'll write it to
-//!    // a static array CITY_DATA where the type of each element is (&'static str, u32).
-//!    // Note that Strings are converted to static string slices by default.
-//!    //
-//!    rustifact::write_static_array!(CITY_DATA, (&'static str, u32), &city_data);
-//!    //
-//!    // We could have specified the dimension like so:
-//!    //rustifact::write_static_array!(CITY_DATA, (&'static str, u32) : 1, &city_data);
-//!    //
-//!    // When the dimension is unspecified (as above) the default is dimension 1.
-//!}
+//! fn main() {
+//!     // Write a constant of type Option<(i32, i32)>
+//!     let a = Some((1, 2));
+//!     rustifact::write_const!(CONST_A, Option<(i32, i32)>, &a);
+//!     // Write a static variable of type &'static str. Strings map to static string slices.
+//!     let b = format!("Hello {}", "from Rustifact");
+//!     rustifact::write_static!(STATIC_B, &'static str, &b);
+//!     // Write a getter function returning Vec<Vec<i32>>
+//!     let c = vec![vec![1], vec![2, 3], vec![4, 5, 6]];
+//!     rustifact::write_fn!(get_c, Vec<Vec<i32>>, &c);
+//!     // Write a static array of i32 with dimension two.
+//!     let arr1: [[i32; 3]; 3] = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+//!     rustifact::write_static_array!(ARRAY_1, i32 : 2, &arr1);
+//!     // Write a const array of f32 with dimension one.
+//!     let arr2: [f32; 3] = [1.1, 1.2, 1.3];
+//!     rustifact::write_const_array!(ARRAY_2, f32 : 1, &arr2);
+//!     // or equivalently: rustifact::write_const_array!(ARRAY_2, f32, &arr2);
+//! }
 //!```
 //!
 //!src/main.rs
 //! ```no_run
-//! rustifact::use_symbols!(CITY_DATA);
-//! // The above line is equivalent to the declaration:
-//! // static CITY_DATA: [(&'static str, u32); 1000] = [/*.. data from build.rs */];
+//! rustifact::use_symbols!(CONST_A, STATIC_B, get_c, ARRAY_1, ARRAY_2);
 //!
 //! fn main() {
-//!    for (name, population) in CITY_DATA.iter() {
-//!        println!("{} has population {}", name, population)
-//!    }
-//!}
+//!     assert!(CONST_A == Some((1, 2)));
+//!     assert!(STATIC_B == "Hello from Rustifact");
+//!     assert!(get_c() == vec![vec![1], vec![2, 3], vec![4, 5, 6]]);
+//!     assert!(ARRAY_1 == [[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
+//!     assert!(ARRAY_2 == [1.1, 1.2, 1.3]);
+//! }
+//! ```
+//!
+//! Cargo.toml
+//! ```no_run
+//! [package]
+//! ## ...
+//!
+//! [build-dependencies]
+//! rustifact = "0.5"
+//!
+//! [dependencies]
+//! rustifact = "0.5"
 //! ```
 //!
 //! # Development status

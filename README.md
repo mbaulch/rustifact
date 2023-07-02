@@ -31,6 +31,55 @@ build.rs
 ```rust
 use rustifact::ToTokenStream;
 
+fn main() {
+    // Write a constant of type Option<(i32, i32)>
+    let a = Some((1, 2));
+    rustifact::write_const!(CONST_A, Option<(i32, i32)>, &a);
+    // Write a static variable of type &'static str. Strings map to static string slices.
+    let b = format!("Hello {}", "from Rustifact");
+    rustifact::write_static!(STATIC_B, &'static str, &b);
+    // Write a getter function returning Vec<Vec<i32>>
+    let c = vec![vec![1], vec![2, 3], vec![4, 5, 6]];
+    rustifact::write_fn!(get_c, Vec<Vec<i32>>, &c);
+    // Write a static array of i32 with dimension two.
+    let arr1: [[i32; 3]; 3] = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+    rustifact::write_static_array!(ARRAY_1, i32 : 2, &arr1);
+    // Write a const array of f32 with dimension one.
+    let arr2: [f32; 3] = [1.1, 1.2, 1.3];
+    rustifact::write_const_array!(ARRAY_2, f32 : 1, &arr2);
+    // or equivalently: rustifact::write_const_array!(ARRAY_2, f32, &arr2);
+}```
+
+src/main.rs
+```rust
+rustifact::use_symbols!(CONST_A, STATIC_B, get_c, ARRAY_1, ARRAY_2);
+
+fn main() {
+    assert!(CONST_A == Some((1, 2)));
+    assert!(STATIC_B == "Hello from Rustifact");
+    assert!(get_c() == vec![vec![1], vec![2, 3], vec![4, 5, 6]]);
+    assert!(ARRAY_1 == [[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
+    assert!(ARRAY_2 == [1.1, 1.2, 1.3]);
+}
+```
+
+Cargo.toml
+```toml
+[package]
+# ...
+
+[build-dependencies]
+rustifact = "0.5"
+
+[dependencies]
+rustifact = "0.5"
+```
+
+
+build.rs
+```rust
+use rustifact::ToTokenStream;
+
 fn generate_city_data() -> Vec<(String, u32)> {
     let mut city_data: Vec<(String, u32)> = Vec::new();
     for i in 1..=100 {
