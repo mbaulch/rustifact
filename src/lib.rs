@@ -12,7 +12,7 @@
 //! procedural macros, and increasingly, const functions. Each of these methods, however,
 //! brings its own set of challenges.
 //!
-//! *Rustifact* has been designed as a streamlined abstraction layer that simplifies the creation of build scripts
+//! *Rustifact* has been designed as an abstraction layer that simplifies the creation of build scripts
 //! that produce data for inclusion into the final binary.
 //!
 //! # Usage steps
@@ -31,6 +31,9 @@
 //!
 //! (#) These types should be implemented in a separate crate, so they're usable from the build script
 //! _and_ the main crate.
+//!
+//! NOTE: We refer to exclusively to *data* in the above, but Rustifact is also capable of generating *types*
+//! in some situations where doing so by hand would be burdensome.
 //!
 //! # A simple example
 //! build.rs
