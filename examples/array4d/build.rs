@@ -12,6 +12,6 @@ fn main() {
             }
         }
     }
-    // Write the data to a file as a static array
+    // Write out the data as a static array
     rustifact::write_static_array!(ARRAY_4D, u32 : 4, arr);
 }
