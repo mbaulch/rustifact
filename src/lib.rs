@@ -595,9 +595,23 @@ macro_rules! __write_tokens_with_internal {
     ($id_name:ident, $tokens:expr) => {
         let path_str = rustifact::__path_from_id!($id_name);
         let path = std::path::Path::new(&path_str);
-        let syntax_tree = rustifact::internal::parse_file(&$tokens.to_string()).unwrap();
-        let formatted = rustifact::internal::unparse(&syntax_tree);
-        std::fs::write(&path, formatted).unwrap();
+        match rustifact::internal::parse_file(&$tokens.to_string()) {
+            Ok(syntax_tree) => {
+                let formatted = rustifact::internal::unparse(&syntax_tree);
+                std::fs::write(&path, formatted).unwrap();
+            }
+            Err(e) => {
+                std::fs::write(&path, &$tokens.to_string()).unwrap();
+                panic!(
+                    "Failed to pretty-print {} due to parse error: '{}'
+This _probably_ indicates in issue with a ToTokenStream implementation. Unformatted output has
+been written to {}",
+                    stringify!(id_name),
+                    e,
+                    path.display()
+                );
+            }
+        }
     };
 }
 
