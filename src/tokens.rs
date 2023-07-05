@@ -1,3 +1,6 @@
+use proc_macro2::{Ident, Literal, Span, TokenStream};
+use quote::{quote, TokenStreamExt};
+
 /// Provides a flexible interface for converting Rust's data types into their token stream representation.
 /// This trait is akin to `quote::ToTokens`, with a similar design, but it serves a distinct purpose.
 ///
@@ -21,9 +24,6 @@
 ///
 /// This crate also provides implementations for a range of primitive types, booleans, references, arrays, and vectors.
 ///
-use quote::{quote, TokenStreamExt};
-use proc_macro2::{Ident, Literal, Span, TokenStream};
-
 pub trait ToTokenStream {
     fn to_toks(&self, toks: &mut TokenStream);
 
