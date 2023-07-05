@@ -19,17 +19,14 @@
 //!
 //! 1. Generate the required data in your build script.
 //!
-//! 2. (Optional*#) Implement the [`ToTokenStream`] trait for each of your build script's 'exported' types.
+//! 2. `#[derive(ToTokenStream)]` for any custom types(*) (not in the Rust standard library) exported from your
+//! build script.
 //!
 //! 3. Export your data with any combination of the `write_X` macros.
 //!
 //! 4. In the main part of your crate (within `src/`) import your data with [`use_symbols`].
 //!
-//! (*) [`ToTokenStream`] is implemented for primitive types ([`u8`], [`i32`], [`char`], [`bool`], ...),
-//! [`slice`]s, [`array`], [`Vec`], and [`Option`]. This step is only necessary if you're exporting your
-//! own types. We expect to automate this step soon by providing suitable `[#derive(...)]` macros.
-//!
-//! (#) These types should be implemented in a separate crate, so they're usable from the build script
+//! (*) These types should be implemented in a separate crate, so they're usable from the build script
 //! _and_ the main crate.
 //!
 //! NOTE: We refer to exclusively to *data* in the above, but Rustifact is also capable of generating *types*
@@ -49,6 +46,10 @@
 //!     rustifact::write_static!(STATIC_B, &'static str, &b);
 //!     // Write a getter function returning Vec<Vec<i32>>
 //!     let c = vec![vec![1], vec![2, 3], vec![4, 5, 6]];
+//! (*) [`ToTokenStream`] is implemented for primitive types ([`u8`], [`i32`], [`char`], [`bool`], ...),
+//! [`slice`]s, [`array`], [`Vec`], and [`Option`]. This step is only necessary if you're exporting your
+//! own types. We expect to automate this step soon by providing suitable `[#derive(...)]` macros.
+//!
 //!     rustifact::write_fn!(get_c, Vec<Vec<i32>>, &c);
 //!     // Write a static array of i32 with dimension two.
 //!     let arr1: [[i32; 3]; 3] = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
@@ -94,6 +95,8 @@
 mod tokens;
 
 pub use tokens::ToTokenStream;
+
+pub use rustifact_derive::ToTokenStream;
 
 /// An implementation detail, exposing parts of external crates used by `rustifact`.
 ///
