@@ -46,10 +46,6 @@
 //!     rustifact::write_static!(STATIC_B, &'static str, &b);
 //!     // Write a getter function returning Vec<Vec<i32>>
 //!     let c = vec![vec![1], vec![2, 3], vec![4, 5, 6]];
-//! (*) [`ToTokenStream`] is implemented for primitive types ([`u8`], [`i32`], [`char`], [`bool`], ...),
-//! [`slice`]s, [`array`], [`Vec`], and [`Option`]. This step is only necessary if you're exporting your
-//! own types. We expect to automate this step soon by providing suitable `[#derive(...)]` macros.
-//!
 //!     rustifact::write_fn!(get_c, Vec<Vec<i32>>, &c);
 //!     // Write a static array of i32 with dimension two.
 //!     let arr1: [[i32; 3]; 3] = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
