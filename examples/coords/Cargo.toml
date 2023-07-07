@@ -6,9 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-rustifact = "0.6"
+rustifact = { path = "../../" }
 data = { path = "data" }
 
 [dependencies]
-rustifact = "0.6"
+rustifact = { path = "../../" }
 data = { path = "data" }
