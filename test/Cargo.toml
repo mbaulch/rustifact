@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 rustifact = { path = "../" }
+walkdir = "2.3.3"

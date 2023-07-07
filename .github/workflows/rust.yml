@@ -19,4 +19,4 @@ jobs:
     - name: Build
       run: cargo build
     - name: Run tests
-      run: cargo run --bin test
+      run: cargo run -p test

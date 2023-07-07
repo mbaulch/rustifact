@@ -1,0 +1,27 @@
+//file:Cargo.toml
+[package]
+name = "test"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+rustifact = { path = "../../" }
+
+[dependencies]
+rustifact = { path = "../../" }
+
+[workspace]
+
+//file:build.rs
+use rustifact::ToTokenStream;
+
+fn main() {
+    rustifact::write_static!(FOO, u32, 15u32);
+}
+
+//file:src/main.rs
+rustifact::use_symbols!(FOO);
+
+fn main() {
+    assert!(FOO == 15);
+}
