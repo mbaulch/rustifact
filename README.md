@@ -1,9 +1,11 @@
-# Rustifact &emsp; [![Build Status]][actions] [![Latest Version]][crates.io]
+# Rustifact &emsp; [![Build Status]][actions] [![Latest Version]][crates.io] [![docs]][docs.rs]
 
 [Build Status]: https://github.com/mbaulch/rustifact/actions/workflows/rust.yml/badge.svg?branch=master
 [actions]: https://github.com/mbaulch/rustifact/actions?query=branch%3Amaster
 [Latest Version]: https://img.shields.io/crates/v/rustifact.svg
 [crates.io]: https://crates.io/crates/rustifact
+[docs]: https://docs.rs/rustifact/badge.svg
+[docs.rs]: https://docs.rs/rustifact
 
 
 _A seamless bridge between a build script and the main crate._
