@@ -1,6 +1,6 @@
 # Rustifact &emsp; [![Build Status]][actions] [![Latest Version]][crates.io]
 
-[Build Status]: https://img.shields.io/github/actions/workflow/status/mbaulch/rustifact/ci.yml?branch=master
+[Build Status]: https://img.shields.io/github/actions/workflow/status/mbaulch/rustifact/.github/workflows/Rust.yml?branch=master
 [actions]: https://github.com/mbaulch/rustifact/actions?query=branch%3Amaster
 [Latest Version]: https://img.shields.io/crates/v/rustifact.svg
 [crates.io]: https://crates.io/crates/rustifact
