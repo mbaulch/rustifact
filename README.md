@@ -1,4 +1,4 @@
-# Rustifact
+# Rustifact &emsp; [![Build Status]][actions] [![Latest Version]][crates.io]
 _A seamless bridge between a build script and the main crate._
 
 # Motivation
