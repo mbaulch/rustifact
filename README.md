@@ -82,7 +82,7 @@ rustifact = "0.5"
 
 * [city_data](examples/city_data) Generates and exports a one dimensional array using `write_static_array!`
 
-* [coords](examples/coords) Demonstrates the use of custom types with '#[derive(ToTokenStream)]'.
+* [coords](examples/coords) Demonstrates the use of custom types with `#[derive(ToTokenStream)]`.
 
 * [html_tags](examples/html_tags) Exports a large collection of individual constants using `write_statics!`.
 
