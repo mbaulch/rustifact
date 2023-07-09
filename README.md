@@ -95,6 +95,8 @@ rustifact = "0.6"
 
 * [html_tags](examples/html_tags) Exports a large collection of individual constants using `write_statics!`.
 
+* [out_type](examples/out_type) Demonstrates struct export with `ToTokenStream`'s `OutType` attribute.
+
 For more examples, inspect the `write_X` macros in the [crate documentation](https://docs.rs/rustifact).
 
 # Development status
