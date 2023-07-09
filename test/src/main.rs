@@ -13,7 +13,7 @@ fn main() {
         fs::remove_dir_all(&output_dir).expect("Failed to remove existing test directory");
     }
     fs::create_dir_all(&output_dir).expect("Failed to create test directory");
-    for entry in WalkDir::new("test") {
+    for entry in WalkDir::new(".") {
         let entry = entry.expect("Failed to read directory entry");
         let path = entry.path();
         if path.is_file() && path.extension() == Some("test".as_ref()) {

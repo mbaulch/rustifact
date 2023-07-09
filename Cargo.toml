@@ -12,6 +12,3 @@ quote = "1.0.29"
 prettyplease = "0.2.9"
 syn = { version = "2.0.22", features = ["parsing"] }
 proc-macro2 = "1.0.63"
-
-[workspace]
-members = ["test"]
