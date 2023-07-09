@@ -16,7 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build
+    - name: Build rustifact
       run: cargo build
+    - name: Run examples
+      run: for dir in examples/*; do (cd "$dir" && cargo run) done
     - name: Run tests
       run: cd test && cargo run
