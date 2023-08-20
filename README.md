@@ -106,6 +106,8 @@ rustifact = "0.8"
 
 * [out_type](examples/out_type) Demonstrates struct export with `ToTokenStream`'s `OutType` attribute.
 
+* [map](examples/map) Demonstrates construction of a map with lookup via a perfect hash function.
+
 For more examples, inspect the `write_X` macros in the [crate documentation](https://docs.rs/rustifact).
 
 # Development status
