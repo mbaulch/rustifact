@@ -10,7 +10,7 @@ repository = "https://github.com/mbaulch/rustifact"
 rustifact_derive = "0.2.0"
 quote = "1.0.29"
 prettyplease = "0.2.9"
-syn = { version = "2.0.22", features = ["parsing"] }
+syn = { version = "2.0.22", features = ["parsing", "printing"], default-features = false }
 proc-macro2 = "1.0.63"
 phf = { version = "0.11.2", optional = true }
 phf_codegen = { version = "0.11.2", optional = true }
