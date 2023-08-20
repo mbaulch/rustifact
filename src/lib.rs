@@ -85,10 +85,10 @@
 //! ## ...
 //!
 //! [build-dependencies]
-//! rustifact = "0.6"
+//! rustifact = "0.8"
 //!
 //! [dependencies]
-//! rustifact = "0.6"
+//! rustifact = "0.8"
 //! ```
 //!
 //! # Development status
