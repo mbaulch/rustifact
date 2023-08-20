@@ -19,6 +19,15 @@ brings its own set of challenges.
 *Rustifact* has been designed as an abstraction layer that simplifies the creation of build scripts
 that produce data for inclusion into the final binary.
 
+# Types supported
+Rustifact allows `static` and `const` declarations of data types composed of numeric types
+(floats, ints, usize), booleans, strings, arrays, structs, and enums. Also supported are
+(unordered and ordered) sets and maps with perfect-hash lookup.
+
+(*) Sets and maps are provided with help from the excellent
+[phf_codegen](https://crates.io/crates/phf_codegen) library, though these features are gated via
+the `set` and `map` features.
+
 # Usage steps
 1. Generate the required data in your build script.
 

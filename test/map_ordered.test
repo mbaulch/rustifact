@@ -1,0 +1,45 @@
+//file:Cargo.toml
+[package]
+name = "test"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+rustifact = { path = "../../../", features = ["map"] }
+
+[dependencies]
+rustifact = { path = "../../../", features = ["map"] }
+
+[workspace]
+
+//file:build.rs
+use rustifact::{OrderedMapBuilder, ToTokenStream};
+
+fn main() {
+    let mut nmap: OrderedMapBuilder<u32, u32> = OrderedMapBuilder::new();
+    nmap.entry(0, 10);
+    nmap.entry(1, 11);
+    nmap.entry(2, 12);
+    nmap.entry(3, 13);
+    nmap.entry(4, 14);
+    rustifact::write_static!(NMAP, OrderedMap<u32, u32>, &nmap);
+    let mut smap: OrderedMapBuilder<&'static str, &'static str> = OrderedMapBuilder::new();
+    smap.entry("hello", "there");
+    smap.entry("what", "do");
+    smap.entry("you", "think?");
+    rustifact::write_static!(SMAP, OrderedMap<&'static str, &'static str>, &smap);
+}
+
+//file:src/main.rs
+use rustifact::OrderedMap;
+
+rustifact::use_symbols!(NMAP, SMAP);
+
+fn main() {
+    assert!(NMAP.len() == 5);
+    let nmap_entries = NMAP.entries().map(|(n1, n2)| (*n1, *n2)).collect::<Vec<(u32, u32)>>();
+    assert_eq!(&nmap_entries, &[(0, 10), (1, 11), (2, 12), (3, 13), (4, 14)]);
+    let smap_entries = SMAP.entries().map(|(s1, s2)| (*s1, *s2)).collect::<Vec<(&'static str, &'static str)>>();
+    assert!(SMAP.len() == 3);
+    assert_eq!(&smap_entries, &[("hello", "there"), ("what", "do"), ("you", "think?")]);
+}

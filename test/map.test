@@ -1,0 +1,49 @@
+//file:Cargo.toml
+[package]
+name = "test"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+rustifact = { path = "../../../", features = ["map"] }
+
+[dependencies]
+rustifact = { path = "../../../", features = ["map"] }
+
+[workspace]
+
+//file:build.rs
+use rustifact::{MapBuilder, ToTokenStream};
+
+fn main() {
+    let mut nmap: MapBuilder<u32, u32> = MapBuilder::new();
+    nmap.entry(0, 10);
+    nmap.entry(1, 11);
+    nmap.entry(2, 12);
+    nmap.entry(3, 13);
+    nmap.entry(4, 14);
+    rustifact::write_static!(NMAP, Map<u32, u32>, &nmap);
+    let mut smap: MapBuilder<&'static str, &'static str> = MapBuilder::new();
+    smap.entry("hello", "there");
+    smap.entry("what", "do");
+    smap.entry("you", "think?");
+    rustifact::write_static!(SMAP, Map<&'static str, &'static str>, &smap);
+}
+
+//file:src/main.rs
+use rustifact::Map;
+
+rustifact::use_symbols!(NMAP, SMAP);
+
+fn main() {
+    assert!(NMAP.len() == 5);
+    assert!(NMAP.get(&0) == Some(&10));
+    assert!(NMAP.get(&1) == Some(&11));
+    assert!(NMAP.get(&2) == Some(&12));
+    assert!(NMAP.get(&3) == Some(&13));
+    assert!(NMAP.get(&4) == Some(&14));
+    assert!(SMAP.len() == 3);
+    assert!(SMAP.get(&"hello") == Some(&"there"));
+    assert!(SMAP.get(&"what") == Some(&"do"));
+    assert!(SMAP.get(&"you") == Some(&"think?"));
+}

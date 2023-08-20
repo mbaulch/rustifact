@@ -1,0 +1,44 @@
+//file:Cargo.toml
+[package]
+name = "test"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+rustifact = { path = "../../../", features = ["set"] }
+
+[dependencies]
+rustifact = { path = "../../../", features = ["set"] }
+
+[workspace]
+
+//file:build.rs
+use rustifact::{OrderedSetBuilder, ToTokenStream};
+
+fn main() {
+    let mut nset: OrderedSetBuilder<u32> = OrderedSetBuilder::new();
+    nset.entry(10);
+    nset.entry(11);
+    nset.entry(12);
+    nset.entry(13);
+    nset.entry(14);
+    rustifact::write_static!(NSET, OrderedSet<u32>, &nset);
+    let mut sset: OrderedSetBuilder<&'static str> = OrderedSetBuilder::new();
+    sset.entry("hello");
+    sset.entry("there");
+    rustifact::write_static!(SSET, OrderedSet<&'static str>, &sset);
+}
+
+//file:src/main.rs
+use rustifact::OrderedSet;
+
+rustifact::use_symbols!(NSET, SSET);
+
+fn main() {
+    assert!(NSET.len() == 5);
+    let nset_entries = NSET.iter().map(|n| *n).collect::<Vec<u32>>();
+    assert_eq!(&nset_entries, &[10, 11, 12, 13, 14]);
+    let sset_entries = SSET.iter().map(|s| *s).collect::<Vec<&'static str>>();
+    assert!(SSET.len() == 2);
+    assert_eq!(&sset_entries, &["hello", "there"]);
+}

@@ -1,0 +1,47 @@
+//file:Cargo.toml
+[package]
+name = "test"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+rustifact = { path = "../../../", features = ["set"] }
+
+[dependencies]
+rustifact = { path = "../../../", features = ["set"] }
+
+[workspace]
+
+//file:build.rs
+use rustifact::{SetBuilder, ToTokenStream};
+
+fn main() {
+    let mut nset: SetBuilder<u32> = SetBuilder::new();
+    nset.entry(10);
+    nset.entry(11);
+    nset.entry(12);
+    nset.entry(13);
+    nset.entry(14);
+    rustifact::write_static!(NSET, Set<u32>, &nset);
+    let mut sset: SetBuilder<&'static str> = SetBuilder::new();
+    sset.entry("hello");
+    sset.entry("there");
+    rustifact::write_static!(SSET, Set<&'static str>, &sset);
+}
+
+//file:src/main.rs
+use rustifact::Set;
+
+rustifact::use_symbols!(NSET, SSET);
+
+fn main() {
+    assert!(NSET.len() == 5);
+    assert!(NSET.contains(&10));
+    assert!(NSET.contains(&11));
+    assert!(NSET.contains(&12));
+    assert!(NSET.contains(&13));
+    assert!(NSET.contains(&14));
+    assert!(SSET.len() == 2);
+    assert!(SSET.contains(&"hello"));
+    assert!(SSET.contains(&"there"));
+}

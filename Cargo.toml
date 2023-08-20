@@ -12,3 +12,18 @@ quote = "1.0.29"
 prettyplease = "0.2.9"
 syn = { version = "2.0.22", features = ["parsing"] }
 proc-macro2 = "1.0.63"
+phf = { version = "0.11.2", optional = true }
+phf_codegen = { version = "0.11.2", optional = true }
+phf_generator = { version = "0.11.2", optional = true }
+phf_shared = { version = "0.11.2", optional = true }
+
+[build-dependencies]
+phf = { version = "0.11.2", optional = true }
+phf_shared = { version = "0.11.2", optional = true }
+
+[features]
+map = ["dep:phf_codegen", "dep:phf_generator", "dep:phf", "dep:phf_shared"]
+set = ["dep:phf_codegen", "dep:phf_generator", "dep:phf", "dep:phf_shared"]
+
+[package.metadata.docs.rs]
+features = ["map", "set"]

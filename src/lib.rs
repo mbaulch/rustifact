@@ -15,6 +15,15 @@
 //! *Rustifact* has been designed as an abstraction layer that simplifies the creation of build scripts
 //! that produce data for inclusion into the final binary.
 //!
+//! # Types supported
+//! Rustifact allows `static` and `const` declarations of data types composed of numeric types
+//! (floats, ints, usize), booleans, strings, arrays, structs, and enums. Also supported are
+//! (unordered and ordered) sets and maps with perfect-hash lookup.
+//!
+//! (*) Sets and maps are provided with help from the excellent
+//! [phf_codegen](https://crates.io/crates/phf_codegen) library, though these features are gated via
+//! the `set` and `map` features.
+//!
 //! # Usage steps
 //!
 //! 1. Generate the required data in your build script.
@@ -90,14 +99,24 @@
 
 mod tokens;
 
-pub use tokens::ToTokenStream;
+mod phf;
+
+#[cfg(feature = "map")]
+pub use crate::phf::{Map, MapBuilder, OrderedMap, OrderedMapBuilder};
+
+#[cfg(feature = "set")]
+pub use crate::phf::{OrderedSet, OrderedSetBuilder, Set, SetBuilder};
 
 pub use rustifact_derive::ToTokenStream;
+pub use tokens::ToTokenStream;
 
 /// An implementation detail, exposing parts of external crates used by `rustifact`.
 ///
 /// API stability is not guaranteed here.
 pub mod internal {
+    /// A re-export of the `phf` crate.
+    #[cfg(any(feature = "map", feature = "set"))]
+    pub use phf;
     /// A re-export of `unparse` from the `prettyplease` crate.
     pub use prettyplease::unparse;
     /// A re-export of `TokenStream` from the `proc_macro2` crate.
