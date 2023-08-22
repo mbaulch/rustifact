@@ -88,10 +88,10 @@ Cargo.toml
 # ...
 
 [build-dependencies]
-rustifact = "0.8"
+rustifact = "0.9"
 
 [dependencies]
-rustifact = "0.8"
+rustifact = "0.9"
 ```
 
 # More examples
