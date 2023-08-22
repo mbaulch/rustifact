@@ -114,7 +114,6 @@ pub use tokens::ToTokenStream;
 ///
 /// API stability is not guaranteed here.
 pub mod internal {
-    /// A re-export of the `phf` crate.
     #[cfg(any(feature = "map", feature = "set"))]
     pub use phf;
     /// A re-export of `unparse` from the `prettyplease` crate.
