@@ -1,0 +1,63 @@
+//file:Cargo.toml
+[package]
+name = "test"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+rustifact = { path = "../../../" }
+data = { path = "data" }
+
+[dependencies]
+rustifact = { path = "../../../" }
+data = { path = "data" }
+
+[workspace]
+
+//file:data/Cargo.toml
+[package]
+name = "data"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rustifact = { path = "../../../../" }
+
+//file:data/src/lib.rs
+use rustifact::ToTokenStream;
+
+#[derive(ToTokenStream, PartialEq, Eq)]
+pub struct TwoGeneric<S, T>
+    where S: ToTokenStream + PartialEq + Eq,
+          T: ToTokenStream + PartialEq + Eq
+{
+    pub a: S,
+    pub b: T,
+}
+
+#[derive(ToTokenStream, PartialEq, Eq)]
+pub struct U32Tuple
+{
+    pub n: u32,
+    pub t: (u32, u32),
+}
+
+//file:build.rs
+use rustifact::ToTokenStream;
+use data::{U32Tuple, TwoGeneric};
+
+fn main() {
+    rustifact::write_static!(U32_TUPLE, U32Tuple, U32Tuple {n: 1, t: (2, 3)});
+    rustifact::write_static!(
+        TWO_GENERIC, TwoGeneric<Option<bool>, (i32, i32)>, TwoGeneric {a: Some(false), b: (1, 2)}
+    );
+}
+
+//file:src/main.rs
+rustifact::use_symbols!(U32_TUPLE, TWO_GENERIC);
+use data::{U32Tuple, TwoGeneric};
+
+fn main() {
+    assert!(U32_TUPLE == U32Tuple {n: 1, t: (2, 3)});
+    assert!(TWO_GENERIC == TwoGeneric {a: Some(false), b: (1, 2)});
+}

@@ -1,0 +1,102 @@
+//file:Cargo.toml
+[package]
+name = "test"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+rustifact = { path = "../../../" }
+data = { path = "data" }
+
+[dependencies]
+rustifact = { path = "../../../" }
+data = { path = "data" }
+
+[workspace]
+
+//file:data/Cargo.toml
+[package]
+name = "data"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rustifact = { path = "../../../../" }
+
+//file:data/src/lib.rs
+use rustifact::ToTokenStream;
+
+#[derive(ToTokenStream, PartialEq, Eq)]
+pub struct Empty {}
+
+#[derive(ToTokenStream, PartialEq, Eq)]
+pub struct SingleU32 {
+    pub x: u32
+}
+
+#[derive(ToTokenStream, PartialEq, Eq)]
+#[OutType(SingleStr)]
+pub struct SingleStrIn {
+    pub s: String
+}
+
+#[derive(ToTokenStream, PartialEq, Eq)]
+pub struct SingleStr {
+    pub s: &'static str
+}
+
+#[derive(ToTokenStream, PartialEq, Eq)]
+pub struct SingleGeneric<T>
+    where T: ToTokenStream + PartialEq + Eq
+{
+    pub a: T
+}
+
+
+#[derive(ToTokenStream, PartialEq, Eq)]
+pub struct SingleTuple
+{
+    pub a: (u64, u64)
+}
+
+#[derive(ToTokenStream, PartialEq, Eq)]
+pub struct SingleOption
+{
+    pub a: Option<u32>
+}
+
+#[derive(ToTokenStream, PartialEq)]
+pub struct SingleFloat
+{
+    pub a: f32,
+}
+
+//file:build.rs
+use rustifact::ToTokenStream;
+use data::{Empty, SingleU32, SingleStrIn, SingleGeneric, SingleTuple, SingleOption, SingleFloat};
+
+fn main() {
+    rustifact::write_static!(EMPTY, Empty, Empty {});
+    rustifact::write_static!(SINGLE_U32, SingleU32, SingleU32 {x: 12});
+    rustifact::write_static!(SINGLE_STR, SingleStr, SingleStrIn {s: "hello".to_string()});
+    rustifact::write_static!(SINGLE_GENERIC, SingleGeneric<i32>, SingleGeneric {a: 7});
+    rustifact::write_static!(SINGLE_TUPLE, SingleTuple, SingleTuple {a: (31, 32)});
+    rustifact::write_static!(SINGLE_OPTION, SingleOption, SingleOption {a: Some(3)});
+    rustifact::write_static!(SINGLE_FLOAT, SingleFloat, SingleFloat{a: 1.23});
+}
+
+//file:src/main.rs
+rustifact::use_symbols!(
+    EMPTY, SINGLE_U32, SINGLE_STR, SINGLE_GENERIC, SINGLE_TUPLE, SINGLE_OPTION, SINGLE_FLOAT
+);
+use data::{Empty, SingleU32, SingleStr, SingleGeneric, SingleTuple, SingleOption, SingleFloat};
+
+fn main() {
+    assert!(EMPTY == Empty {});
+    assert!(SINGLE_U32 == SingleU32 {x: 12});
+    assert!(SINGLE_STR == SingleStr {s: "hello"});
+    assert!(SINGLE_GENERIC == SingleGeneric {a: 7});
+    assert!(SINGLE_TUPLE == SingleTuple {a: (31, 32)});
+    assert!(SINGLE_OPTION == SingleOption {a: Some(3)});
+    assert!(SINGLE_FLOAT.a > 1.22 && SINGLE_FLOAT.a < 1.24)
+}
