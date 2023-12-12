@@ -147,30 +147,6 @@ pub mod internal {
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! __get_tokens_array_multi {
-    ($data:expr, $get_inner:expr) => {{
-        let mut tokens = rustifact::internal::TokenStream::new();
-        for element in $data.iter().map($get_inner) {
-            tokens.extend(rustifact::internal::quote! { #element, });
-        }
-        rustifact::internal::quote! { [#tokens] }
-    }};
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! __get_tokens_vector_fn_multi {
-    ($data:expr, $get_inner:expr) => {{
-        let mut tokens = rustifact::internal::TokenStream::new();
-        for element in $data.iter().map($get_inner) {
-            tokens.extend(rustifact::internal::quote! { #element, });
-        }
-        rustifact::internal::quote! { vec![#tokens] }
-    }};
-}
-
-#[doc(hidden)]
-#[macro_export]
 macro_rules! __get_tokens_array_impl {
     (0, $data:expr) => {{
         let mut tokens = rustifact::internal::TokenStream::new();
