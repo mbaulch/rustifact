@@ -24,6 +24,8 @@
 //! [phf_codegen](https://crates.io/crates/phf_codegen) library, though these features are gated via
 //! the `set` and `map` features.
 //!
+//! (*) Jagged array support is available via the [rustifact_extra](https://crates.io/crates/rustifact_extra) crate.
+//!
 //! # Usage steps
 //!
 //! 1. Generate the required data in your build script.
