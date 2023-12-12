@@ -87,10 +87,10 @@
 //! ## ...
 //!
 //! [build-dependencies]
-//! rustifact = "0.9"
+//! rustifact = "0.10"
 //!
 //! [dependencies]
-//! rustifact = "0.9"
+//! rustifact = "0.10"
 //! ```
 //!
 //! # Development status
