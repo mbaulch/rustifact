@@ -88,6 +88,36 @@ macro_rules! write_public {
     };
 }
 
+macro_rules! write_public_deprecated {
+    (
+        $id:ident, $const_static:ident, $deprec_version:literal, $deprec_note:literal,
+        $params_extra:expr, $doc:expr
+    ) => {
+        let path_str = path_from_id!($id);
+        let path = std::path::Path::new(&path_str);
+        let id = stringify!($id);
+        let const_static = stringify!($const_static);
+        let deprecation_info = format!(
+            "#[deprecated(since = \"{}\", note = \"{}\")]",
+            $deprec_version, $deprec_note
+        );
+        let s = format!(
+            "#[doc = \"{}\"]\n{}\n{} {} {{\n{}\n{}\n}}",
+            $doc,
+            deprecation_info,
+            MACRO_HEADER,
+            id,
+            public_base_entry_for(id),
+            (1..=NUM_DIMS)
+                .into_iter()
+                .map(|d| public_entry_for(d, const_static, $params_extra))
+                .collect::<Vec<String>>()
+                .join("\n")
+        );
+        std::fs::write(&path, s).unwrap();
+    };
+}
+
 // The number of dimensions supported by Rustifact. Adjustable via NUM_DIMS.
 // The only reason we don't support more is that limitations in Rust's macro system (as of Rust 1.69)
 // require this code generation for each dimension, and additionally, we wish to minimise code bloat.
@@ -116,8 +146,7 @@ where `DIM` is the dimension (1, 2, 3, ...) of the array. The dimension defaults
 * `$data`: the contents of the array. May be an array, an array reference, or array slice.
 
 ## Further notes
-* Must be called from a build script (build.rs) only.
-* If the array elements are heap allocated, use [`write_array_fn`] instead."#
+* Must be called from a build script (build.rs) only."#
     );
     write_public!(
         write_const_array,
@@ -137,12 +166,13 @@ where `DIM` is the dimension (1, 2, 3, ...) of the array. The dimension defaults
 ## Further notes
 * Must be called from a build script (build.rs) only.
 * If the array is large and referenced many times, this will lead to code bloat. In such a case,
-consider carefully whether [`write_static_array`] would be more appropriate instead.
-* If the array elements are heap allocated, use [`write_array_fn`] instead."#
+consider carefully whether [`write_static_array`] would be more appropriate instead."#
     );
-    write_public!(
+    write_public_deprecated!(
         write_array_fn,
         dummy,
+        "0.10.0",
+        "It seems that `write_array_fn!` only serves very rare use cases. If you disagree, please file an issue on Github.",
         "__get_tokens_array, __array_type, __write_fn_with_internal",
         r#"Write an array or vector to an array getter function.
 
@@ -158,9 +188,11 @@ where `DIM` is the dimension (1, 2, 3, ...) of the array. The dimension defaults
 * Must be called from a build script (build.rs) only.
 * If the array elements are not heap allocated, consider using [`write_static_array`] or [`write_const_array`] instead."#
     );
-    write_public!(
+    write_public_deprecated!(
         write_vector_fn,
         dummy,
+        "0.10.0",
+        "Use JaggedArray from the rustifact_extra crate instead for a proper static representation",
         "__get_tokens_vector_fn, __vector_type, __write_fn_with_internal",
         r#"Write an array or vector to a vector getter function.
 
@@ -174,7 +206,6 @@ where `DIM` is the dimension (1, 2, 3, ...) of the array. The dimension defaults
 or array slice.
 
 ## Further notes
-* Must be called from a build script (build.rs) only.
-* If the output won't be mutated, consider using [`write_array_fn`] instead."#
+* Must be called from a build script (build.rs) only."#
     );
 }
